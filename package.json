@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "node --watch backend --exec babel-node backend/server.js",
-    "start": "node --watch backend --exec babel-node backend/server.js",
+    "server": "node backend/server.js",
+    "start": "node backend/server.js",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
