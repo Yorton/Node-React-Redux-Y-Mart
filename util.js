@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
-import config from './config';
+const jwt = require('jsonwebtoken');
+const {MONGODB_URL, PORT, JWT_SECRET} = require('./config');
 
 const getToken = (user) => {
     return jwt.sign({
@@ -8,7 +8,7 @@ const getToken = (user) => {
         email: user.email,
         isAdmin: user.isAdmin
 
-    }, config.JWT_SECRET, {
+    }, JWT_SECRET, {
         expiresIn: '48h'
     });
 }
@@ -17,7 +17,7 @@ const isAuth = (req, res, next) => {
     const token = req.headers.authorization;
     if (token){
         const onlyToken =  token.slice(7, token.length);//bearer xxx
-        jwt.verify(onlyToken, config.JWT_SECRET, (err, decode) => {
+        jwt.verify(onlyToken, JWT_SECRET, (err, decode) => {
             if (err){
                 return res.status(401).send({msg: "Invalid token."});
             }
@@ -38,4 +38,4 @@ const isAdmin = (req, res, next) => {
     return res.status(401).send({msg: "Admin token is not valid."});
 }
 
-export {getToken, isAuth, isAdmin};
+module.exports = {getToken, isAuth, isAdmin};

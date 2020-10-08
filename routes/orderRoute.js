@@ -1,20 +1,20 @@
-import express from 'express';
-import Order from '../models/orderModal';
-import { isAuth, isAdmin } from '../util';
+const express = require('express');
+const Order = require('../models/orderModal');
+const {isAuth, isAdmin} = require('../util');
 
-const router = express.Router();
+const orderRoute = express.Router();
 
-router.get("/", isAuth, async (req, res) => {
+orderRoute.get("/", isAuth, async (req, res) => {
   const orders = await Order.find({}).populate('user');
   res.send(orders);
 });
 
-router.get("/mine", isAuth, async (req, res) => {
+orderRoute.get("/mine", isAuth, async (req, res) => {
   const orders = await Order.find({ user: req.user._id });//req.user is from isAuth
   res.send(orders);
 });
 
-router.get("/:id", isAuth, async (req, res) => {
+orderRoute.get("/:id", isAuth, async (req, res) => {
   const order = await Order.findOne({ _id: req.params.id });
   if (order) {
     res.send(order);
@@ -23,7 +23,7 @@ router.get("/:id", isAuth, async (req, res) => {
   }
 });
 
-router.delete("/:id", isAuth, isAdmin, async (req, res) => {
+orderRoute.delete("/:id", isAuth, isAdmin, async (req, res) => {
   const order = await Order.findOne({ _id: req.params.id });
   if (order) {
     const deletedOrder = await order.remove();
@@ -33,7 +33,7 @@ router.delete("/:id", isAuth, isAdmin, async (req, res) => {
   }
 });
 
-router.post("/", isAuth, async (req, res) => {
+orderRoute.post("/", isAuth, async (req, res) => {
 
     const newOrder = new Order({
       orderItems: req.body.orderItems,
@@ -49,7 +49,7 @@ router.post("/", isAuth, async (req, res) => {
     res.status(201).send({ message: "New Order Created", data: newOrderCreated });
 });
 
-router.put("/:id/pay", isAuth, async (req, res) => {
+orderRoute.put("/:id/pay", isAuth, async (req, res) => {
   const order = await Order.findById(req.params.id);
   if (order) {
     order.isPaid = true;
@@ -70,4 +70,4 @@ router.put("/:id/pay", isAuth, async (req, res) => {
   }
 });
 
-export default router;
+module.exports = orderRoute;

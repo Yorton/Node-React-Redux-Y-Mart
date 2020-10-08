@@ -1,10 +1,10 @@
-import express from 'express';
-import Product from '../models/productModel';
-import {isAuth, isAdmin} from '../util';
+const express = require('express');
+const Product = require('../models/productModel');
+const {isAuth, isAdmin} = require('../util');
 
-const router = express.Router();
+const productRoute = express.Router();
 
-router.get('/', async (req, res) => {
+productRoute.get('/', async (req, res) => {
 
     //const products = await Product.find({});
 
@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
     res.send(products);
 });
 
-router.get('/:id', async (req, res) => {
+productRoute.get('/:id', async (req, res) => {
 
     const product = await Product.findOne({_id: req.params.id});//find return array led to frontend use object properties are undefined
     if (product){
@@ -41,7 +41,7 @@ router.get('/:id', async (req, res) => {
 });
 
 
-router.post('/', isAuth, isAdmin, async (req, res) => {
+productRoute.post('/', isAuth, isAdmin, async (req, res) => {
 
     const product = new Product({
         name: req.body.name,
@@ -64,7 +64,7 @@ router.post('/', isAuth, isAdmin, async (req, res) => {
  });
 
 
- router.put('/:id', isAuth, isAdmin, async (req, res) => {
+ productRoute.put('/:id', isAuth, isAdmin, async (req, res) => {
 
     const productId = req.params.id;
     const product = await Product.findOne({_id: productId});
@@ -89,7 +89,7 @@ router.post('/', isAuth, isAdmin, async (req, res) => {
  });
 
 
- router.delete('/:id', isAuth, isAdmin, async (req, res) => {
+ productRoute.delete('/:id', isAuth, isAdmin, async (req, res) => {
 
     const deletedProduct = await Product.findById(req.params.id);
     if (deletedProduct) {
@@ -100,7 +100,7 @@ router.post('/', isAuth, isAdmin, async (req, res) => {
     }
  });
 
- router.post('/:id/reviews', isAuth, async (req, res) => {
+ productRoute.post('/:id/reviews', isAuth, async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (product) {
       const review = {
@@ -126,4 +126,4 @@ router.post('/', isAuth, isAdmin, async (req, res) => {
     }
   });
 
-export default router;
+  module.exports = productRoute;

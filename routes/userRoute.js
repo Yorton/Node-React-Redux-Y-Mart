@@ -1,10 +1,10 @@
-import express from 'express';
-import User from '../models/userModel';
-import {getToken, isAuth} from '../util';
+const express = require('express');
+const User = require('../models/userModel');
+const {getToken, isAuth} = require('../util');
 
-const router = express.Router();
+const userRoute = express.Router();
 
-router.post('/signin', async (req, res) => {
+userRoute.post('/signin', async (req, res) => {
 
     try{
 
@@ -31,7 +31,7 @@ router.post('/signin', async (req, res) => {
     }
 });
 
-router.post('/register', async (req, res) => {
+userRoute.post('/register', async (req, res) => {
 
     try{
         const user = new User({
@@ -60,7 +60,7 @@ router.post('/register', async (req, res) => {
 });
 
 
-router.get('/createadmin', async (req, res) => {
+userRoute.get('/createadmin', async (req, res) => {
 
     try{
 
@@ -79,7 +79,7 @@ router.get('/createadmin', async (req, res) => {
 });
 
 
-router.put('/:id', isAuth, async (req, res) => {
+userRoute.put('/:id', isAuth, async (req, res) => {
 
     const userId = req.params.id;
 
@@ -102,4 +102,4 @@ router.put('/:id', isAuth, async (req, res) => {
     }
   });
 
-export default router;
+  module.exports = userRoute;

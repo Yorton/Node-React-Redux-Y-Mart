@@ -1,17 +1,15 @@
-import express from 'express';
-import path from 'path';
-import data from './data';
-import dotenv from 'dotenv';
-import config from './config';
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
-import userRoute from './routes/userRoute';
-import productRoute from './routes/productRoute';
-import orderRoute from './routes/orderRoute';
+const express = require('express');
+const path = require('path');
+const {MONGODB_URL, PORT, JWT_SECRET} = require('./config');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const userRoute = require('./routes/userRoute');
+const productRoute = require('./routes/productRoute');
+const orderRoute = require('./routes/orderRoute');
 
-dotenv.config();
+//dotenv.config();
 
-const mongodbUrl = config.MONGODB_URL;
+const mongodbUrl = MONGODB_URL;
 mongoose.connect(mongodbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -26,6 +24,8 @@ app.use('/api/users', userRoute);
 app.use('/api/products', productRoute);
 
 app.use('/api/orders', orderRoute);
+
+
 
 // app.get('/api/products/:id', (req, res) => {
 
@@ -51,6 +51,6 @@ app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 
-const port = process.env.PORT || config.PORT;
+const port = process.env.PORT || PORT;
 
 app.listen(port, ()=> {console.log(`Server started at http://localhost:${port} `);});
